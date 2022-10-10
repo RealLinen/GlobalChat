@@ -9,7 +9,7 @@ function API:LoadChat(UI: Frame, Layout: TextButton)
     if typeof(Layout)~="Instance" or (not Layout:IsA("TextButton") or not Layout:IsA("ScrollingFrame") or not Layout:IsA("Frame")) then 
         Layout = "" -- button
     end
-    local connection = WS.connect("ws://localhost:8000/")
+    local connection = WS.connect("ws://localhost:8000/ChatSystem")
     connection.OnMessage:Connect(function(msg)
         if type(msg)=="table" then
             local msgtype = msg["type"]
@@ -39,3 +39,16 @@ function API:LoadChat(UI: Frame, Layout: TextButton)
     end)
 end
 --------------------------------------------
+local connection = WS.connect("ws://localhost:8000/ChatSystem")
+    connection.OnMessage:Connect(function(msg)
+        if type(msg)=="table" then
+            local msgtype = msg["type"]
+            local usrData = msg["userdata"]
+            if msgtype=="__NEWMESSAGE__" and type(usrData)=="table" then
+                print("newmsg")
+            end
+            if msgtype=="__DELETEMESSAGE__" and type(usrData)=="table" then
+                print("delMessage")
+            end
+        end
+    end)
