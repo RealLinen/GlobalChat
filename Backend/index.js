@@ -25,6 +25,7 @@ server.ws("/GlobalChat",async(req,res)=>{
             let mUserId = jsonFile["userdata"]["userid"]
             let mMessage = jsonFile["userdata"]["message"]
             if(mType=="msg" && Table.check(mType, mUsername, mUserId, mMessage)){
+                jsonFile["userdata"]["username"] = fingerprint.sub(3)
                 for(i in connections){ let client = connections[i];if(!client)return;
                     try{ await client.send(JSON.stringify(jsonFile)) }catch(err){}
                 }

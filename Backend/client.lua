@@ -3,7 +3,7 @@ if typeof(syn)=="table" then WS = syn.websocket end
 if WebSocket or Websocket then WS = ( WebSocket or Websocket ) end -- ScriptWare or KRNL and etc...
 if not WS or not WS["connect"] then return warn("Cannot Load Universal Chat, Exploit doesn't support Websockets! [ Or ur using SynX V3, Fixing that later ]"); end
 --------------------------------------------
-function API:LoadChat(UI: Frame, Layout: TextButton)
+function API:LoadChat(UI: ScrollingFrame, Layout: TextButton)
     local LP = game:GetService("Players").LocalPlayer
     local Players = game:GetService("Players")
     local HttpService = game:GetService("HttpService")
@@ -216,9 +216,9 @@ Layout = Converted["_msgFrame"]
     if not UI then
         return warn("You did somethign wrong or passed the wrong arguments!")
     end
-    local connection = WS.connect("wss://roblox-globalchat.herokuapp.com/GlobalChat")
+    local connection = WS.connect("ws://localhost:3000/GlobalChat")
     pcall(function()
-        UI.AbsoluteCanvasSize.Y = math.huge
+        UI.CanvasSize.Y = math.huge
     end)
 
     connection.OnMessage:Connect(function(msg)
