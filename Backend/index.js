@@ -2,14 +2,16 @@ const Table = require("./Modules")
 const server = Table.express_ws(Table.express()).app
 const connections = {}
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\\
-server.ws("/authenticate.php",async(req,res)=>{
+server.ws("/GlobalChat",async(req,res)=>{
     let [ identifier, fingerprint ] = [Table.findInTable(res.headers,"Identi"),Table.findInTable(res.headers,"Finger")]
     var close = async function(msg){await req.send(msg||"No message supplied");setTimeout(function(){req.close()},2000)};
     if( !identifier || !fingerprint ) return await close(`print([[Request Deined! Invalid Body]])`)
+    close = async function(msg){try{await req.send(msg||"No message supplied")}catch(err){};connections[fingerprint] = null;setTimeout(function(){req.close()},2000)};
     if(connections[fingerprint]){
-        await connections[fingerprint].close(`print[[New session started!]]`)
+        await connections[fingerprint].close(`print[[ You already had an session, it was cleared! ]]`)
     }
     console.log(`Client "${fingerprint}" Connected!`)
+    await req.send(`print[[Chat UI: Global Started Working]]`)
     connections[fingerprint] = { 
         send: async(msg)=>{ await req.send(msg||"No message supplied"); },
         close: close
@@ -28,6 +30,9 @@ server.ws("/authenticate.php",async(req,res)=>{
                 }
             }
         }
+    })
+    req.on("close", async()=>{
+        await close("print[[You ended the request lmao]]")
     })
     setTimeout(async()=>{ try{ await close(`print[[Maximum connection time exceeded, you have been disconnected!]]`) }catch{}}, (60000) * 300)
 })

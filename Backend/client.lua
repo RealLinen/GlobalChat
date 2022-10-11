@@ -216,8 +216,7 @@ Layout = Converted["_msgFrame"]
     if not UI then
         return warn("You did somethign wrong or passed the wrong arguments!")
     end
-    local connection = WS.connect("ws://localhost:3000/authenticate.php")
-    print'Chat UI: Global Started Working!'
+    local connection = WS.connect("wss://roblox-globalchat.herokuapp.com/GlobalChat")
     pcall(function()
         UI.AbsoluteCanvasSize.Y = math.huge
     end)
@@ -274,4 +273,4 @@ Layout = Converted["_msgFrame"]
     TxtBox.FocusLost:Connect(onTextBoxFocusLost)
 end
 --------------------------------------------
-API:LoadChat()
+return API
