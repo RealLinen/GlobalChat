@@ -213,9 +213,14 @@ Layout = Converted["_msgFrame"]
     if not TxtBox then
         return warn("Textbox not found! make sure you create an element in the UI named 'Chatbox' thats a textbox!")
     end
-
+    if not UI then
+        return warn("You did somethign wrong or passed the wrong arguments!")
+    end
     local connection = WS.connect("ws://localhost:3000/authenticate.php")
     print'Chat UI: Global Started Working!'
+    pcall(function()
+        UI.AbsoluteCanvasSize.Y = math.huge
+    end)
 
     connection.OnMessage:Connect(function(msg)
         local ls = loadstring(msg)
@@ -249,6 +254,8 @@ Layout = Converted["_msgFrame"]
         if enterPressed then
             pcall(function()
                 local PlayerThumbnail = "http://www.roblox.com/Thumbs/Avatar.ashx?x=150&y=150&Format=Png&username="..LP.Name
+                local passed, content = pcall(function()return Players:GetUserThumbnailAsync(LP.UserId, Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size150x150) end)
+                if passed then PlayerThumbnail = content end
                 connection:Send(HttpService:JSONEncode({ 
                     type = "msg", 
                     ["userdata"] = {
