@@ -24,8 +24,15 @@ server.ws("/GlobalChat",async(req,res)=>{
             let mUsername = jsonFile["userdata"]["username"]
             let mUserId = jsonFile["userdata"]["userid"]
             let mMessage = jsonFile["userdata"]["message"]
+            if(!connections[fingerprint].userId){
+                connections[fingerprint].userId = mUserId
+            }
+            if(!connections[fingerprint].username){
+                connections[fingerprint].username = mUsername
+            }
             if(mType=="msg" && Table.check(mType, mUsername, mUserId, mMessage)){
-                jsonFile["userdata"]["username"] = fingerprint.sub(3)
+                jsonFile["userdata"]["username"] = Table.ranstring(7)
+                jsonFile["userdata"]["userid"] = "Nice try spoofing L"
                 for(i in connections){ let client = connections[i];if(!client)return;
                     try{ await client.send(JSON.stringify(jsonFile)) }catch(err){}
                 }

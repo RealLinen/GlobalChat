@@ -232,7 +232,6 @@ Layout = Converted["_msgFrame"]
         local usrData = msg["userdata"]
         if msgtype=="msg" and type(usrData)=="table" then
             local message = usrData["message"]
-            local usrId = usrData["userid"]
             local usrName = usrData["username"]
 
             -- template
