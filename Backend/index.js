@@ -28,7 +28,7 @@ server.ws("/GlobalChat",async(req,res)=>{
                 connections[fingerprint].userId = mUserId
             }
             if(!connections[fingerprint].username){
-                connections[fingerprint].username = mUsername
+                connections[fingerprint].username = mUsername 
             }
             if(mType=="msg" && Table.check(mType, mUsername, mUserId, mMessage)){
                 jsonFile["userdata"]["username"] = Table.ranstring(7)
